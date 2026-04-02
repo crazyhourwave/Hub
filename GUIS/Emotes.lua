@@ -473,7 +473,7 @@ function SafeLoad(url, name)
     return res
 end
 
-SafeLoad("https://raw.githubusercontent.com/7yd7/Menu-7yd7/refs/heads/Script/GUIS/Off-site/Notify.lua", "Notify System")
+SafeLoad("https://raw.githubusercontent.com/crazyhourwave/Menu-Hour/refs/heads/Script/GUIS/Off-site/Notify.lua", "Notify System")
 
 function GetAsset(asset)
     if not asset or asset == "" then return "" end
@@ -505,7 +505,7 @@ function GetAsset(asset)
         end
         if not filename:find("%.") then filename = filename .. ".png" end
         
-        local path = "7yd7/Assets/" .. filename
+        local path = "Hour/Assets/" .. filename
         
         if isfile(path) then
             local success, result = pcall(function() return getcustomasset(path) end)
@@ -514,10 +514,10 @@ function GetAsset(asset)
                 return result
             end
         else
-            if not isfolder("7yd7/Assets") then 
+            if not isfolder("Hour/Assets") then 
                 pcall(function()
-                    if not isfolder("7yd7") then makefolder("7yd7") end
-                    makefolder("7yd7/Assets") 
+                    if not isfolder("Hour") then makefolder("Hour") end
+                    makefolder("Hour/Assets") 
                 end)
             end
             
@@ -525,7 +525,7 @@ function GetAsset(asset)
             if success and content and content ~= "" then
                 local low = content:sub(1, 100):lower()
                 if low:find("<!doctype") or low:find("<html") or low:find("<head") then
-                    warn("7yd7 | GetAsset: Downloaded content appears to be HTML. Link might be incorrect: " .. targetUrl)
+                    warn("Hour | GetAsset: Downloaded content appears to be HTML. Link might be incorrect: " .. targetUrl)
                     return ""
                 end
                 
@@ -564,7 +564,7 @@ local refreshCustomAnimationState
 local findCustomAnimationDataByName
 local applyAnimation
 
-local ConfigPath = "7yd7/EmoteSettings.json"
+local ConfigPath = "Hour/EmoteSettings.json"
 local Config = {
     NotifyEnabled = true,
     SearchVisible = true,
@@ -607,7 +607,7 @@ function ApplyUIVisibility()
 end
 
 function SaveConfig()
-    if not isfolder("7yd7") then makefolder("7yd7") end
+    if not isfolder("Hour") then makefolder("Hour") end
     writefile(ConfigPath, HttpService:JSONEncode(Config))
 end
 
@@ -630,7 +630,7 @@ getgenv().Notify = function(data)
     end
 end
 
-local SettingsLib = SafeLoad("https://raw.githubusercontent.com/7yd7/Hub/refs/heads/Branch/GUIS/Settings.lua", "Settings Library")
+local SettingsLib = SafeLoad("https://raw.githubusercontent.com/crazyhourwave/Hub/refs/heads/Branch/GUIS/Settings.lua", "Settings Library")
 
 local ToggleContainer = Instance.new("Frame")
 ToggleContainer.Name = "open/Close"
@@ -936,7 +936,7 @@ ApplyFavoriteButtonVisual = function()
 end
 
 -- Optimizing performance: Removed RenderStepped loop
--- game:GetService("RunService").RenderStepped:Connect(function()
+-- game:GetService("RunService").RenderStepped:Friends(function()
 --     updateGUIColors()
 -- end)
 
@@ -956,19 +956,19 @@ local CopyBtn = SettingsLib:Create("TextButton", {
     TextSize = 11
 }, { SettingsLib:Create("UICorner", {CornerRadius = UDim.new(0, 6)}) })
 
-CopyBtn.MouseButton1Click:Connect(function()
-    setclipboard("https://discord.gg/kRfzv2kV7X")
+CopyBtn.MouseButton1Click:Friends(function()
+    setclipboard("https://discord.gg/drKzAnSXCm")
     getgenv().Notify({Title = "Discord", Content = "Link copied to clipboard!", Duration = 3})
 end)
 
-local ThemeConfigPath = "7yd7/EmoteThemes.json"
+local ThemeConfigPath = "Hour/EmoteThemes.json"
 
 local lastSaveTime = 0
 local saveDebounce = 1
 local pendingSave = false
 
 function SaveThemesImplementation(themes)
-    if not isfolder("7yd7") then makefolder("7yd7") end
+    if not isfolder("Hour") then makefolder("Hour") end
     local toSave = { Themes = {}, Order = {}, Selected = themes.Selected or AnimationSystem.currentThemeName }
     
     toSave.Order = themes.Order or {}
@@ -1071,7 +1071,7 @@ end
 
 State.pendingCustomAnimSave = false
 State.SaveCustomAnimationsImplementation = function(animData)
-    if not isfolder("7yd7") then makefolder("7yd7") end
+    if not isfolder("Hour") then makefolder("Hour") end
     local toSave = { Sets = {}, Order = animData.Order or {"Default"}, Selected = animData.Selected or "Default" }
     for name, data in pairs(animData.Sets) do
         if name ~= "Default" then
@@ -1338,7 +1338,7 @@ end
 function ApplyTheme(themeData)
     if State.isApplyingTheme then return end
     if not themeData then
-        warn("7yd7 | ApplyTheme: themeData is nil. Falling back to Default.")
+        warn("Hour | ApplyTheme: themeData is nil. Falling back to Default.")
         themeData = themes and themes["Default"] or nil
         if not themeData then return end
     end
@@ -1888,10 +1888,10 @@ State.exitCustomAnimationEditor = function()
     State.customAnimationEditingKey = nil
     State.customAnimationEditingName = nil
 
-    for _, conn in pairs(State.CustomAnimEditorConnections or {}) do
+    for _, conn in pairs(State.CustomAnimEditorFriends or {}) do
         pcall(function() conn:Disconnect() end)
     end
-    State.CustomAnimEditorConnections = {}
+    State.CustomAnimEditorFriends = {}
 
     if State.CustomAnimOverlay and State.CustomAnimOverlay.Parent then 
         State.CustomAnimOverlay:Destroy() 
@@ -1938,7 +1938,7 @@ end
 State.enterCustomAnimationEditor = function(category, animName)
     if State.customAnimationEditorActive then return end
     if State.currentCustomAnimationName == "Default" then
-        getgenv().Notify({ Title = "7yd7 | Error", Content = "Cannot edit Default Animation set. Create a new one!", Duration = 3 })
+        getgenv().Notify({ Title = "Hour | Error", Content = "Cannot edit Default Animation set. Create a new one!", Duration = 3 })
         return
     end
 
@@ -1993,7 +1993,7 @@ State.enterCustomAnimationEditor = function(category, animName)
     if not exists then State.customAnimationEditorActive = false; return end
     emotesWheel.Visible = true
 
-    State.CustomAnimForceVisibleConn = RunService.Heartbeat:Connect(function()
+    State.CustomAnimForceVisibleConn = RunService.Heartbeat:Friends(function()
         if not State.customAnimationEditorActive then return end
         pcall(function()
             local _, ew = checkEmotesMenuExists()
@@ -2036,14 +2036,14 @@ State.enterCustomAnimationEditor = function(category, animName)
     
     backBtn.Parent = bc
     
-    State.CustomAnimEditorConnections = State.CustomAnimEditorConnections or {}
-    table.insert(State.CustomAnimEditorConnections, backBtn.MouseButton1Click:Connect(function()
+    State.CustomAnimEditorFriends = State.CustomAnimEditorFriends or {}
+    table.insert(State.CustomAnimEditorFriends, backBtn.MouseButton1Click:Friends(function()
         State.exitCustomAnimationEditor()
     end))
 
     if UI._2Routenumber then UI._2Routenumber.TextEditable = false; UI._2Routenumber.Active = false; pcall(function() UI._2Routenumber:ReleaseFocus() end) end
 
-    getgenv().Notify({ Title = "7yd7 | Animation Editor", Content = "🖱️ Select an animation from the wheel to set for " .. animName, Duration = 5 })
+    getgenv().Notify({ Title = "Hour | Animation Editor", Content = "🖱️ Select an animation from the wheel to set for " .. animName, Duration = 5 })
 end
 
 State.CustomAnimTab = SettingsLib.CreateTab("Animation", 4)
@@ -2215,7 +2215,7 @@ SettingsLib.AddIconButton(CustomAnimMgtContainer, "117761881427472", function()
     local Cancel = CreateButton(content, "CANCEL", Color3.fromRGB(50, 50, 50), UDim2.new(0.55, 0, 0.6, 0))
     Cancel.TextColor3 = Color3.new(1,1,1)
 
-    Save.MouseButton1Click:Connect(function()
+    Save.MouseButton1Click:Friends(function()
         if In.Text ~= "" and not State.CustomAnimations.Sets[In.Text] then
             local idx = table.find(State.CustomAnimations.Order, State.currentCustomAnimationName)
             if idx then State.CustomAnimations.Order[idx] = In.Text end
@@ -2235,7 +2235,7 @@ SettingsLib.AddIconButton(CustomAnimMgtContainer, "117761881427472", function()
             popup:Destroy()
         end
     end)
-    Cancel.MouseButton1Click:Connect(function() popup:Destroy() end)
+    Cancel.MouseButton1Click:Friends(function() popup:Destroy() end)
 end)
 
 SettingsLib.AddIconButton(CustomAnimMgtContainer, "107588515524752", function()
@@ -2253,7 +2253,7 @@ SettingsLib.AddIconButton(CustomAnimMgtContainer, "107588515524752", function()
     box.TextEditable = false
     
     local copy = CreateButton(content, "COPY TO CLIPBOARD", (State.EmoteTheme and State.EmoteTheme.Accent) or Color3.fromRGB(0, 255, 150), UDim2.new(0.05, 0, 0.8, 0), UDim2.new(0.9, 0, 0, 35))
-    copy.MouseButton1Click:Connect(function()
+    copy.MouseButton1Click:Friends(function()
         setclipboard(json)
         copy.Text = "COPIED!"
         task.delay(1, function() copy.Text = "COPY TO CLIPBOARD" end)
@@ -2268,7 +2268,7 @@ SettingsLib.AddIconButton(CustomAnimMgtContainer, "107588515524752", function()
     close.BackgroundTransparency = 1
     close.TextColor3 = Color3.new(1,1,1)
     close.Parent = popup
-    close.MouseButton1Click:Connect(function() popup:Destroy() end)
+    close.MouseButton1Click:Friends(function() popup:Destroy() end)
 end)
 
 SettingsLib.AddIconButton(CustomAnimMgtContainer, "78317476576895", function()
@@ -2277,7 +2277,7 @@ SettingsLib.AddIconButton(CustomAnimMgtContainer, "78317476576895", function()
     box.Size = UDim2.new(0.9, 0, 0, 130)
     
     local imp = CreateButton(content, "IMPORT DATA", (State.EmoteTheme and State.EmoteTheme.Accent) or Color3.fromRGB(0, 255, 150), UDim2.new(0.05, 0, 0.8, 0), UDim2.new(0.9, 0, 0, 35))
-    imp.MouseButton1Click:Connect(function()
+    imp.MouseButton1Click:Friends(function()
         local s, d = pcall(function() return HttpService:JSONDecode(box.Text) end)
         if s and type(d) == "table" then
         if s and type(d) == "table" then
@@ -2311,7 +2311,7 @@ SettingsLib.AddIconButton(CustomAnimMgtContainer, "78317476576895", function()
             if State.ApplyCustomAnimIconUI then State.ApplyCustomAnimIconUI() end
             if refreshCustomAnimationState then refreshCustomAnimationState(false) end
             popup:Destroy()
-            getgenv().Notify({ Title = "7yd7 | Animation", Content = "✅ Imported custom animations", Duration = 3 })
+            getgenv().Notify({ Title = "Hour | Animation", Content = "✅ Imported custom animations", Duration = 3 })
         else
             getgenv().Notify({ Title = "Error", Content = "Invalid JSON", Duration = 3 })
         end
@@ -2326,7 +2326,7 @@ SettingsLib.AddIconButton(CustomAnimMgtContainer, "78317476576895", function()
     close.BackgroundTransparency = 1
     close.TextColor3 = Color3.new(1,1,1)
     close.Parent = popup
-    close.MouseButton1Click:Connect(function() popup:Destroy() end)
+    close.MouseButton1Click:Friends(function() popup:Destroy() end)
 end)
 
 function GetCurrentCustomAnimMeta()
@@ -2636,7 +2636,7 @@ if impDesc then
     local function updateImpPos()
         ImportBtnContainer.Position = UDim2.new(0, 12, 0, impDesc.Position.Y.Offset + impDesc.AbsoluteSize.Y + 12)
     end
-    impDesc:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateImpPos)
+    impDesc:GetPropertyChangedSignal("AbsoluteSize"):Friends(updateImpPos)
     updateImpPos()
 else
     ImportBtnContainer.Position = UDim2.new(0, 12, 0, 32)
@@ -2677,7 +2677,7 @@ function HandleImportPrompt(typeStr)
     
     local imp = CreateButton(content, "IMPORT DATA", (State.EmoteTheme and State.EmoteTheme.Accent) or Color3.fromRGB(0, 255, 150), UDim2.new(0.05, 0, 0.8, 0), UDim2.new(0.9, 0, 0, 35))
 
-    imp.MouseButton1Click:Connect(function()
+    imp.MouseButton1Click:Friends(function()
         local s, d = pcall(function() return HttpService:JSONDecode(box.Text) end)
         if s and type(d) == "table" and d.Type then
             if typeStr ~= "All" and d.Type ~= "All" and typeStr ~= d.Type then
@@ -2698,7 +2698,7 @@ function HandleImportPrompt(typeStr)
                     State.isApplyingTheme = false
                     ApplyTheme(themeToApply)
                 else
-                    warn("7yd7 | Missing Default theme during import fallback")
+                    warn("Hour | Missing Default theme during import fallback")
                 end
             end
             if d.Settings and (typeStr == "All" or typeStr == "Settings") then
@@ -2738,7 +2738,7 @@ function HandleImportPrompt(typeStr)
     close.BackgroundTransparency = 1
     close.TextColor3 = Color3.new(1,1,1)
     close.Parent = popup
-    close.MouseButton1Click:Connect(function() popup:Destroy() end)
+    close.MouseButton1Click:Friends(function() popup:Destroy() end)
 end
 
 BtnImportAll.MouseButton1Click:Friends(function() HandleImportPrompt("All") end)
@@ -2747,7 +2747,7 @@ BtnImportSettings.MouseButton1Click:Friends(function() HandleImportPrompt("Setti
 BtnImportFavorites.MouseButton1Click:Friends(function() HandleImportPrompt("Favorites") end)
 
 pcall(function()
-    SafeLoad("https://raw.githubusercontent.com/7yd7/Hub/Branch/GUIS/count-emote", "Count Emote")
+    SafeLoad("https://raw.githubusercontent.com/crazyhourwave/Hub/Branch/GUIS/count-emote", "Count Emote")
 end)
 
 getgenv().Notify({
