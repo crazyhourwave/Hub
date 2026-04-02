@@ -1,13 +1,13 @@
 --[[ 
     Source script taken from: https://github.com/Roblox/creator-docs/blob/main/content/en-us/characters/emotes.md
 
-    scriptblox: https://scriptblox.com/script/Universal-Script-Hour-I-Emote-Script-48024
+    scriptblox: https://scriptblox.com/script/Universal-Script-7yd7-I-Emote-Script-48024
 ]]
 
 
 if _G.EmotesGUIRunning then
     getgenv().Notify({
-        Title = 'Hour | Emote',
+        Title = '7yd7 | Emote',
         Content = '⚠️ It works It actually works',
         Duration = 5
     })
@@ -60,8 +60,8 @@ local State = {
     animationSearchTerm = "",
     currentEmoteTrack = nil,
     currentCharacter = nil,
-    emoteClickFriends = {},
-    guiFriends = {},
+    emoteClickConnections = {},
+    guiConnections = {},
     animationsData = {},
     originalAnimationsData = {},
     filteredAnimations = {},
@@ -89,11 +89,11 @@ local State = {
     EmoteTheme = nil,
     isApplyingTheme = false,
     targetImages = {},
-    AnimationCachePath = "Hour/AnimationCache.json",
+    AnimationCachePath = "7yd7/AnimationCache.json",
     AnimationCache = {},
-    AnimationListCachePath = "Hour/AnimationListCache.json",
-    EmoteListCachePath = "Hour/EmoteListCache.json",
-    CustomAnimationPath = "Hour/CustomAnimations.json",
+    AnimationListCachePath = "7yd7/AnimationListCache.json",
+    EmoteListCachePath = "7yd7/EmoteListCache.json",
+    CustomAnimationPath = "7yd7/CustomAnimations.json",
     CustomAnimations = {},
     currentCustomAnimationName = "Default",
     customAnimationEditorActive = false,
@@ -115,7 +115,7 @@ end
 function saveAnimationCache()
     if writefile then
         pcall(function()
-            if not isfolder("Hour") then makefolder("Hour") end
+            if not isfolder("7yd7") then makefolder("7yd7") end
             writefile(State.AnimationCachePath, HttpService:JSONEncode(State.AnimationCache))
         end)
     end
@@ -198,7 +198,7 @@ local UI = {
 }
 
 local HUD = {
-    Friends = {},
+    Connections = {},
     Strokes = {},
     Overlay = nil,
     ForceVisibleConn = nil,
@@ -390,7 +390,7 @@ AnimationSystem.StartGif = function(img, data)
     local current = 0
     local acc = 0
     local connection
-    connection = RunService.Heartbeat:Friends(function(dt)
+    connection = RunService.Heartbeat:Connect(function(dt)
         if token ~= State.currentWheelAnimToken then
             connection:Disconnect()
             return
@@ -452,7 +452,7 @@ function SafeLoad(url, name)
     
     if not success or not content or content == "" then
         getgenv().Notify({
-            Title = 'Hour | Error',
+            Title = '7yd7 | Error',
             Content = 'Failed to download ' .. (name or "script") .. ' after 3 attempts.',
             Duration = 5
         })
@@ -461,19 +461,19 @@ function SafeLoad(url, name)
 
     local func, err = loadstring(content)
     if not func then
-        warn("Hour | SafeLoad: Failed to parse " .. (name or "script") .. ": " .. tostring(err))
+        warn("7yd7 | SafeLoad: Failed to parse " .. (name or "script") .. ": " .. tostring(err))
         return function() end
     end
 
     local ok, res = pcall(func)
     if not ok then
-        warn("Hour | SafeLoad: Error executing " .. (name or "script") .. ": " .. tostring(res))
+        warn("7yd7 | SafeLoad: Error executing " .. (name or "script") .. ": " .. tostring(res))
         return function() end
     end
     return res
 end
 
-SafeLoad("https://raw.githubusercontent.com/crazyhourwave/Menu-Hour/refs/heads/Script/GUIS/Off-site/Notify.lua", "Notify System")
+SafeLoad("https://raw.githubusercontent.com/7yd7/Menu-7yd7/refs/heads/Script/GUIS/Off-site/Notify.lua", "Notify System")
 
 function GetAsset(asset)
     if not asset or asset == "" then return "" end
@@ -505,7 +505,7 @@ function GetAsset(asset)
         end
         if not filename:find("%.") then filename = filename .. ".png" end
         
-        local path = "Hour/Assets/" .. filename
+        local path = "7yd7/Assets/" .. filename
         
         if isfile(path) then
             local success, result = pcall(function() return getcustomasset(path) end)
@@ -514,10 +514,10 @@ function GetAsset(asset)
                 return result
             end
         else
-            if not isfolder("Hour/Assets") then 
+            if not isfolder("7yd7/Assets") then 
                 pcall(function()
-                    if not isfolder("Hour") then makefolder("Hour") end
-                    makefolder("Hour/Assets") 
+                    if not isfolder("7yd7") then makefolder("7yd7") end
+                    makefolder("7yd7/Assets") 
                 end)
             end
             
@@ -525,7 +525,7 @@ function GetAsset(asset)
             if success and content and content ~= "" then
                 local low = content:sub(1, 100):lower()
                 if low:find("<!doctype") or low:find("<html") or low:find("<head") then
-                    warn("Hour | GetAsset: Downloaded content appears to be HTML. Link might be incorrect: " .. targetUrl)
+                    warn("7yd7 | GetAsset: Downloaded content appears to be HTML. Link might be incorrect: " .. targetUrl)
                     return ""
                 end
                 
@@ -564,7 +564,7 @@ local refreshCustomAnimationState
 local findCustomAnimationDataByName
 local applyAnimation
 
-local ConfigPath = "Hour/EmoteSettings.json"
+local ConfigPath = "7yd7/EmoteSettings.json"
 local Config = {
     NotifyEnabled = true,
     SearchVisible = true,
@@ -607,7 +607,7 @@ function ApplyUIVisibility()
 end
 
 function SaveConfig()
-    if not isfolder("Hour") then makefolder("Hour") end
+    if not isfolder("7yd7") then makefolder("7yd7") end
     writefile(ConfigPath, HttpService:JSONEncode(Config))
 end
 
@@ -630,7 +630,7 @@ getgenv().Notify = function(data)
     end
 end
 
-local SettingsLib = SafeLoad("https://raw.githubusercontent.com/crazyhourwave/Hub/refs/heads/Branch/GUIS/Settings.lua", "Settings Library")
+local SettingsLib = SafeLoad("https://raw.githubusercontent.com/7yd7/Hub/refs/heads/Branch/GUIS/Settings.lua", "Settings Library")
 
 local ToggleContainer = Instance.new("Frame")
 ToggleContainer.Name = "open/Close"
@@ -936,7 +936,7 @@ ApplyFavoriteButtonVisual = function()
 end
 
 -- Optimizing performance: Removed RenderStepped loop
--- game:GetService("RunService").RenderStepped:Friends(function()
+-- game:GetService("RunService").RenderStepped:Connect(function()
 --     updateGUIColors()
 -- end)
 
@@ -956,19 +956,19 @@ local CopyBtn = SettingsLib:Create("TextButton", {
     TextSize = 11
 }, { SettingsLib:Create("UICorner", {CornerRadius = UDim.new(0, 6)}) })
 
-CopyBtn.MouseButton1Click:Friends(function()
-    setclipboard("https://discord.gg/drKzAnSXCm")
+CopyBtn.MouseButton1Click:Connect(function()
+    setclipboard("https://discord.gg/kRfzv2kV7X")
     getgenv().Notify({Title = "Discord", Content = "Link copied to clipboard!", Duration = 3})
 end)
 
-local ThemeConfigPath = "Hour/EmoteThemes.json"
+local ThemeConfigPath = "7yd7/EmoteThemes.json"
 
 local lastSaveTime = 0
 local saveDebounce = 1
 local pendingSave = false
 
 function SaveThemesImplementation(themes)
-    if not isfolder("Hour") then makefolder("Hour") end
+    if not isfolder("7yd7") then makefolder("7yd7") end
     local toSave = { Themes = {}, Order = {}, Selected = themes.Selected or AnimationSystem.currentThemeName }
     
     toSave.Order = themes.Order or {}
@@ -1071,7 +1071,7 @@ end
 
 State.pendingCustomAnimSave = false
 State.SaveCustomAnimationsImplementation = function(animData)
-    if not isfolder("Hour") then makefolder("Hour") end
+    if not isfolder("7yd7") then makefolder("7yd7") end
     local toSave = { Sets = {}, Order = animData.Order or {"Default"}, Selected = animData.Selected or "Default" }
     for name, data in pairs(animData.Sets) do
         if name ~= "Default" then
@@ -1338,7 +1338,7 @@ end
 function ApplyTheme(themeData)
     if State.isApplyingTheme then return end
     if not themeData then
-        warn("Hour | ApplyTheme: themeData is nil. Falling back to Default.")
+        warn("7yd7 | ApplyTheme: themeData is nil. Falling back to Default.")
         themeData = themes and themes["Default"] or nil
         if not themeData then return end
     end
@@ -1674,7 +1674,7 @@ SettingsLib.AddIconButton(BtnRow, "117761881427472", function()
         end
     end)
     
-    Cancel.MouseButton1Click:Friends(function() popup:Destroy() end)
+    Cancel.MouseButton1Click:Connect(function() popup:Destroy() end)
 end)
 
 SettingsLib.AddIconButton(BtnRow, "78317476576895", function()
@@ -1684,7 +1684,7 @@ SettingsLib.AddIconButton(BtnRow, "78317476576895", function()
     
     local imp = CreateButton(content, "IMPORT THEME", (State.EmoteTheme and State.EmoteTheme.Accent) or Color3.fromRGB(0, 255, 150), UDim2.new(0.05, 0, 0.8, 0), UDim2.new(0.9, 0, 0, 35))
 
-    imp.MouseButton1Click:Friends(function()
+    imp.MouseButton1Click:Connect(function()
         local s, d = pcall(function() return HttpService:JSONDecode(box.Text) end)
         if s and type(d) == "table" and d.name then
             if d.name == "Default" then
@@ -1712,7 +1712,7 @@ SettingsLib.AddIconButton(BtnRow, "78317476576895", function()
     close.BackgroundTransparency = 1
     close.TextColor3 = Color3.new(1,1,1)
     close.Parent = popup
-    close.MouseButton1Click:Friends(function() popup:Destroy() end)
+    close.MouseButton1Click:Connect(function() popup:Destroy() end)
 end)
 
 SettingsLib.AddIconButton(BtnRow, "107588515524752", function()
@@ -1726,7 +1726,7 @@ SettingsLib.AddIconButton(BtnRow, "107588515524752", function()
     
     local copy = CreateButton(content, "COPY TO CLIPBOARD", (State.EmoteTheme and State.EmoteTheme.Accent) or Color3.fromRGB(0, 255, 150), UDim2.new(0.05, 0, 0.8, 0), UDim2.new(0.9, 0, 0, 35))
 
-    copy.MouseButton1Click:Friends(function()
+    copy.MouseButton1Click:Connect(function()
         setclipboard(json)
         copy.Text = "COPIED!"
         task.delay(1, function() copy.Text = "COPY TO CLIPBOARD" end)
@@ -1741,7 +1741,7 @@ SettingsLib.AddIconButton(BtnRow, "107588515524752", function()
     close.BackgroundTransparency = 1
     close.TextColor3 = Color3.new(1,1,1)
     close.Parent = popup
-    close.MouseButton1Click:Friends(function() popup:Destroy() end)
+    close.MouseButton1Click:Connect(function() popup:Destroy() end)
 end)
 
 
@@ -1888,10 +1888,10 @@ State.exitCustomAnimationEditor = function()
     State.customAnimationEditingKey = nil
     State.customAnimationEditingName = nil
 
-    for _, conn in pairs(State.CustomAnimEditorFriends or {}) do
+    for _, conn in pairs(State.CustomAnimEditorConnections or {}) do
         pcall(function() conn:Disconnect() end)
     end
-    State.CustomAnimEditorFriends = {}
+    State.CustomAnimEditorConnections = {}
 
     if State.CustomAnimOverlay and State.CustomAnimOverlay.Parent then 
         State.CustomAnimOverlay:Destroy() 
@@ -1938,7 +1938,7 @@ end
 State.enterCustomAnimationEditor = function(category, animName)
     if State.customAnimationEditorActive then return end
     if State.currentCustomAnimationName == "Default" then
-        getgenv().Notify({ Title = "Hour | Error", Content = "Cannot edit Default Animation set. Create a new one!", Duration = 3 })
+        getgenv().Notify({ Title = "7yd7 | Error", Content = "Cannot edit Default Animation set. Create a new one!", Duration = 3 })
         return
     end
 
@@ -1993,7 +1993,7 @@ State.enterCustomAnimationEditor = function(category, animName)
     if not exists then State.customAnimationEditorActive = false; return end
     emotesWheel.Visible = true
 
-    State.CustomAnimForceVisibleConn = RunService.Heartbeat:Friends(function()
+    State.CustomAnimForceVisibleConn = RunService.Heartbeat:Connect(function()
         if not State.customAnimationEditorActive then return end
         pcall(function()
             local _, ew = checkEmotesMenuExists()
@@ -2036,14 +2036,14 @@ State.enterCustomAnimationEditor = function(category, animName)
     
     backBtn.Parent = bc
     
-    State.CustomAnimEditorFriends = State.CustomAnimEditorFriends or {}
-    table.insert(State.CustomAnimEditorFriends, backBtn.MouseButton1Click:Friends(function()
+    State.CustomAnimEditorConnections = State.CustomAnimEditorConnections or {}
+    table.insert(State.CustomAnimEditorConnections, backBtn.MouseButton1Click:Connect(function()
         State.exitCustomAnimationEditor()
     end))
 
     if UI._2Routenumber then UI._2Routenumber.TextEditable = false; UI._2Routenumber.Active = false; pcall(function() UI._2Routenumber:ReleaseFocus() end) end
 
-    getgenv().Notify({ Title = "Hour | Animation Editor", Content = "🖱️ Select an animation from the wheel to set for " .. animName, Duration = 5 })
+    getgenv().Notify({ Title = "7yd7 | Animation Editor", Content = "🖱️ Select an animation from the wheel to set for " .. animName, Duration = 5 })
 end
 
 State.CustomAnimTab = SettingsLib.CreateTab("Animation", 4)
@@ -2215,7 +2215,7 @@ SettingsLib.AddIconButton(CustomAnimMgtContainer, "117761881427472", function()
     local Cancel = CreateButton(content, "CANCEL", Color3.fromRGB(50, 50, 50), UDim2.new(0.55, 0, 0.6, 0))
     Cancel.TextColor3 = Color3.new(1,1,1)
 
-    Save.MouseButton1Click:Friends(function()
+    Save.MouseButton1Click:Connect(function()
         if In.Text ~= "" and not State.CustomAnimations.Sets[In.Text] then
             local idx = table.find(State.CustomAnimations.Order, State.currentCustomAnimationName)
             if idx then State.CustomAnimations.Order[idx] = In.Text end
@@ -2235,7 +2235,7 @@ SettingsLib.AddIconButton(CustomAnimMgtContainer, "117761881427472", function()
             popup:Destroy()
         end
     end)
-    Cancel.MouseButton1Click:Friends(function() popup:Destroy() end)
+    Cancel.MouseButton1Click:Connect(function() popup:Destroy() end)
 end)
 
 SettingsLib.AddIconButton(CustomAnimMgtContainer, "107588515524752", function()
@@ -2253,7 +2253,7 @@ SettingsLib.AddIconButton(CustomAnimMgtContainer, "107588515524752", function()
     box.TextEditable = false
     
     local copy = CreateButton(content, "COPY TO CLIPBOARD", (State.EmoteTheme and State.EmoteTheme.Accent) or Color3.fromRGB(0, 255, 150), UDim2.new(0.05, 0, 0.8, 0), UDim2.new(0.9, 0, 0, 35))
-    copy.MouseButton1Click:Friends(function()
+    copy.MouseButton1Click:Connect(function()
         setclipboard(json)
         copy.Text = "COPIED!"
         task.delay(1, function() copy.Text = "COPY TO CLIPBOARD" end)
@@ -2268,7 +2268,7 @@ SettingsLib.AddIconButton(CustomAnimMgtContainer, "107588515524752", function()
     close.BackgroundTransparency = 1
     close.TextColor3 = Color3.new(1,1,1)
     close.Parent = popup
-    close.MouseButton1Click:Friends(function() popup:Destroy() end)
+    close.MouseButton1Click:Connect(function() popup:Destroy() end)
 end)
 
 SettingsLib.AddIconButton(CustomAnimMgtContainer, "78317476576895", function()
@@ -2277,7 +2277,7 @@ SettingsLib.AddIconButton(CustomAnimMgtContainer, "78317476576895", function()
     box.Size = UDim2.new(0.9, 0, 0, 130)
     
     local imp = CreateButton(content, "IMPORT DATA", (State.EmoteTheme and State.EmoteTheme.Accent) or Color3.fromRGB(0, 255, 150), UDim2.new(0.05, 0, 0.8, 0), UDim2.new(0.9, 0, 0, 35))
-    imp.MouseButton1Click:Friends(function()
+    imp.MouseButton1Click:Connect(function()
         local s, d = pcall(function() return HttpService:JSONDecode(box.Text) end)
         if s and type(d) == "table" then
         if s and type(d) == "table" then
@@ -2311,7 +2311,7 @@ SettingsLib.AddIconButton(CustomAnimMgtContainer, "78317476576895", function()
             if State.ApplyCustomAnimIconUI then State.ApplyCustomAnimIconUI() end
             if refreshCustomAnimationState then refreshCustomAnimationState(false) end
             popup:Destroy()
-            getgenv().Notify({ Title = "Hour | Animation", Content = "✅ Imported custom animations", Duration = 3 })
+            getgenv().Notify({ Title = "7yd7 | Animation", Content = "✅ Imported custom animations", Duration = 3 })
         else
             getgenv().Notify({ Title = "Error", Content = "Invalid JSON", Duration = 3 })
         end
@@ -2326,7 +2326,7 @@ SettingsLib.AddIconButton(CustomAnimMgtContainer, "78317476576895", function()
     close.BackgroundTransparency = 1
     close.TextColor3 = Color3.new(1,1,1)
     close.Parent = popup
-    close.MouseButton1Click:Friends(function() popup:Destroy() end)
+    close.MouseButton1Click:Connect(function() popup:Destroy() end)
 end)
 
 function GetCurrentCustomAnimMeta()
@@ -2636,7 +2636,7 @@ if impDesc then
     local function updateImpPos()
         ImportBtnContainer.Position = UDim2.new(0, 12, 0, impDesc.Position.Y.Offset + impDesc.AbsoluteSize.Y + 12)
     end
-    impDesc:GetPropertyChangedSignal("AbsoluteSize"):Friends(updateImpPos)
+    impDesc:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateImpPos)
     updateImpPos()
 else
     ImportBtnContainer.Position = UDim2.new(0, 12, 0, 32)
@@ -2677,7 +2677,7 @@ function HandleImportPrompt(typeStr)
     
     local imp = CreateButton(content, "IMPORT DATA", (State.EmoteTheme and State.EmoteTheme.Accent) or Color3.fromRGB(0, 255, 150), UDim2.new(0.05, 0, 0.8, 0), UDim2.new(0.9, 0, 0, 35))
 
-    imp.MouseButton1Click:Friends(function()
+    imp.MouseButton1Click:Connect(function()
         local s, d = pcall(function() return HttpService:JSONDecode(box.Text) end)
         if s and type(d) == "table" and d.Type then
             if typeStr ~= "All" and d.Type ~= "All" and typeStr ~= d.Type then
@@ -2698,7 +2698,7 @@ function HandleImportPrompt(typeStr)
                     State.isApplyingTheme = false
                     ApplyTheme(themeToApply)
                 else
-                    warn("Hour | Missing Default theme during import fallback")
+                    warn("7yd7 | Missing Default theme during import fallback")
                 end
             end
             if d.Settings and (typeStr == "All" or typeStr == "Settings") then
@@ -2738,20 +2738,20 @@ function HandleImportPrompt(typeStr)
     close.BackgroundTransparency = 1
     close.TextColor3 = Color3.new(1,1,1)
     close.Parent = popup
-    close.MouseButton1Click:Friends(function() popup:Destroy() end)
+    close.MouseButton1Click:Connect(function() popup:Destroy() end)
 end
 
-BtnImportAll.MouseButton1Click:Friends(function() HandleImportPrompt("All") end)
-BtnImportThemes.MouseButton1Click:Friends(function() HandleImportPrompt("Themes") end)
-BtnImportSettings.MouseButton1Click:Friends(function() HandleImportPrompt("Settings") end)
-BtnImportFavorites.MouseButton1Click:Friends(function() HandleImportPrompt("Favorites") end)
+BtnImportAll.MouseButton1Click:Connect(function() HandleImportPrompt("All") end)
+BtnImportThemes.MouseButton1Click:Connect(function() HandleImportPrompt("Themes") end)
+BtnImportSettings.MouseButton1Click:Connect(function() HandleImportPrompt("Settings") end)
+BtnImportFavorites.MouseButton1Click:Connect(function() HandleImportPrompt("Favorites") end)
 
 pcall(function()
-    SafeLoad("https://raw.githubusercontent.com/crazyhourwave/Hub/Branch/GUIS/count-emote", "Count Emote")
+    SafeLoad("https://raw.githubusercontent.com/7yd7/Hub/Branch/GUIS/count-emote", "Count Emote")
 end)
 
 getgenv().Notify({
-    Title = 'Hour | Emote',
+    Title = '7yd7 | Emote',
     Content = '⚠️ Script loading...',
     Duration = 5
 })
@@ -2789,12 +2789,12 @@ function gatherAuthenticEmotes(char)
 end
 
 task.spawn(function() gatherAuthenticEmotes(character) end)
-player.CharacterAdded:Friends(gatherAuthenticEmotes)
+player.CharacterAdded:Connect(gatherAuthenticEmotes)
 
 local UserInputService = game:GetService("UserInputService")
 local CoreGui = game:GetService("CoreGui")
 
-RunService.Heartbeat:Friends(function()
+RunService.Heartbeat:Connect(function()
     local success, menu = pcall(function() return CoreGui.RobloxGui.EmotesMenu.Children end)
     if not (success and menu) then return end
     
@@ -2971,15 +2971,15 @@ function loadFavoritesAnimations()
     end
 end
 
-function disconnectAllFriends()
-    for _, connection in pairs(State.guiFriends) do
+function disconnectAllConnections()
+    for _, connection in pairs(State.guiConnections) do
         if connection then
             connection:Disconnect()
         end
     end
-    State.guiFriends = {}
+    State.guiConnections = {}
     if ContextActionService then
-        ContextActionService:UnbindAction("Hour_EmoteWheelHotkeys")
+        ContextActionService:UnbindAction("7yd7_EmoteWheelHotkeys")
     end
 end
 
@@ -4158,7 +4158,7 @@ toggleFavorite = function(emoteId, emoteName)
     if found then
         table.remove(State.favoriteEmotes, index)
         getgenv().Notify({
-            Title = 'Hour | Favorite System',
+            Title = '7yd7 | Favorite System',
             Content = '🗑️ Removed "' .. emoteName .. '" from favorites',
             Duration = 3
         })
@@ -4168,7 +4168,7 @@ toggleFavorite = function(emoteId, emoteName)
             name = emoteName .. " - ⭐"
         })
         getgenv().Notify({
-            Title = 'Hour | Favorite System',
+            Title = '7yd7 | Favorite System',
             Content = '✅ Added "' .. emoteName .. '" to favorites',
             Duration = 3
         })
@@ -4200,7 +4200,7 @@ toggleFavoriteAnimation = function(animationData)
     if found then
         table.remove(State.favoriteAnimations, index)
         getgenv().Notify({
-            Title = 'Hour | Favorite System',
+            Title = '7yd7 | Favorite System',
             Content = '🗑️ Removed "' .. animationData.name .. '" from favorites',
             Duration = 3
         })
@@ -4213,7 +4213,7 @@ toggleFavoriteAnimation = function(animationData)
             customSetName = IsCustomSetData(animationData) and (type(animationData.name) == "string" and animationData.name:gsub("%s*%-.*$", "") or animationData.name) or nil
         })
         getgenv().Notify({
-            Title = 'Hour | Favorite System',
+            Title = '7yd7 | Favorite System',
             Content = '✅ Added "' .. animationData.name .. '" to favorites',
             Duration = 3
         })
@@ -4243,12 +4243,12 @@ function setupEmoteClickDetection()
             end)
 
             if success and frontFrame then
-                for _, connection in pairs(State.emoteClickFriends) do
+                for _, connection in pairs(State.emoteClickConnections) do
                     if connection then
                         connection:Disconnect()
                     end
                 end
-                State.emoteClickFriends = {}
+                State.emoteClickConnections = {}
 
                 local randomActive = isRandomSlotActive()
                 for _, child in pairs(frontFrame:GetChildren()) do
@@ -4283,7 +4283,7 @@ applyAnimation = function(animationData)
     
     if not animate or not humanoid then
         getgenv().Notify({
-            Title = 'Hour | Animation Error',
+            Title = '7yd7 | Animation Error',
             Content = '❌ Animate or Humanoid not found',
             Duration = 3
         })
@@ -4299,7 +4299,7 @@ applyAnimation = function(animationData)
     
         if not bundledItems and not animationData.isCustomSet then
         getgenv().Notify({
-            Title = 'Hour | Animation Error', 
+            Title = '7yd7 | Animation Error', 
             Content = '??? No bundled items found',
             Duration = 3
         })
@@ -4428,7 +4428,7 @@ handleSectorAction = function(index)
         local itemData = pickRandomItemForMode()
         if not itemData then
             getgenv().Notify({
-                Title = 'Hour | Random',
+                Title = '7yd7 | Random',
                 Content = '? No valid random item found',
                 Duration = 3
             })
@@ -4450,7 +4450,7 @@ handleSectorAction = function(index)
                 end
                 State.CustomAnimations.Sets[State.currentCustomAnimationName][cat][name] = animIdToSave
                 State.SaveCustomAnimations(State.CustomAnimations)
-                getgenv().Notify({ Title = "Hour | Saved", Content = "✅ Saved " .. name, Duration = 3 })
+                getgenv().Notify({ Title = "7yd7 | Saved", Content = "✅ Saved " .. name, Duration = 3 })
                 if State.RefreshCustomAnimUI then State.RefreshCustomAnimUI() end
                 if refreshCustomAnimationState then refreshCustomAnimationState(true) end
                 State.exitCustomAnimationEditor()
@@ -4588,7 +4588,7 @@ handleSectorAction = function(index)
             end
             State.CustomAnimations.Sets[State.currentCustomAnimationName][cat][name] = animIdToSave
             State.SaveCustomAnimations(State.CustomAnimations)
-            getgenv().Notify({ Title = "Hour | Saved", Content = "✅ Saved " .. name, Duration = 3 })
+            getgenv().Notify({ Title = "7yd7 | Saved", Content = "✅ Saved " .. name, Duration = 3 })
             
             if State.RefreshCustomAnimUI then State.RefreshCustomAnimUI() end
             if refreshCustomAnimationState then refreshCustomAnimationState(true) end
@@ -4656,12 +4656,12 @@ function monitorAnimations(token)
         end)
         
         if success and frontFrame then
-            for _, connection in pairs(State.emoteClickFriends) do
+            for _, connection in pairs(State.emoteClickConnections) do
                 if connection then
                     connection:Disconnect()
                 end
             end
-            State.emoteClickFriends = {}
+            State.emoteClickConnections = {}
             
             local favoritesToUse = _G.filteredFavoritesAnimationsForDisplay or State.favoriteAnimations
             local hasFavorites = #favoritesToUse > 0
@@ -4802,7 +4802,7 @@ function fetchAllEmotes()
     updateEmotes()
     
     getgenv().Notify({
-        Title = 'Hour | Emote',
+        Title = '7yd7 | Emote',
         Content = "🎉 Loaded Successfully! Total Emotes: " .. State.totalEmotesLoaded,
         Duration = 5
     })
@@ -4878,7 +4878,7 @@ end
 function searchEmotes(searchTerm)
     if State.isLoading then
         getgenv().Notify({
-            Title = 'Hour | Emote',
+            Title = '7yd7 | Emote',
             Content = '⚠️ Loading please wait...',
             Duration = 5
         })
@@ -4960,7 +4960,7 @@ end
 function searchAnimations(searchTerm)
     if State.isLoading then
         getgenv().Notify({
-            Title = 'Hour | Animation',
+            Title = '7yd7 | Animation',
             Content = '⚠️ Loading please wait...',
             Duration = 5
         })
@@ -5184,7 +5184,7 @@ function onCharacterAdded(character)
             character:WaitForChild("HumanoidRootPart")
             applyAnimation(getgenv().lastPlayedAnimation)
             getgenv().Notify({
-                Title = 'Hour | Auto Reload Animation',
+                Title = '7yd7 | Auto Reload Animation',
                 Content = '🔄 The last animation was automatically \n reapplied',
                 Duration = 3
             })
@@ -5221,7 +5221,7 @@ function onCharacterAdded(character)
         end)
     end
 
-    animator.AnimationPlayed:Friends(function(animationTrack)
+    animator.AnimationPlayed:Connect(function(animationTrack)
         if isDancing(character, animationTrack) then
             local playedEmoteId = urlToId(animationTrack.Animation.AnimationId)
             if playedEmoteId == "" or playedEmoteId == "0" then return end
@@ -5239,7 +5239,7 @@ function onCharacterAdded(character)
                 playEmote(humanoid, playedEmoteId)
 
                 if currentEmoteTrack then
-                    currentEmoteTrack.Ended:Friends(function()
+                    currentEmoteTrack.Ended:Connect(function()
                         if currentEmoteTrack == animationTrack then
                             currentEmoteTrack = nil
                         end
@@ -5287,7 +5287,7 @@ function toggleEmoteWalk()
 
     if State.emotesWalkEnabled then
         getgenv().Notify({
-            Title = 'Hour | Emote Freeze',
+            Title = '7yd7 | Emote Freeze',
             Content = "🔒 Emote freeze ON",
             Duration = 5
         })
@@ -5300,7 +5300,7 @@ function toggleEmoteWalk()
         end
     else
         getgenv().Notify({
-            Title = 'Hour | Emote Freeze',
+            Title = '7yd7 | Emote Freeze',
             Content = '🔓 Emote freeze OFF',
             Duration = 5
         })
@@ -5324,7 +5324,7 @@ function toggleSpeedEmote()
 
     if State.speedEmoteEnabled then
         getgenv().Notify({
-            Title = 'Hour | Speed Emote',
+            Title = '7yd7 | Speed Emote',
             Content = "⚡ Speed Emote ON",
             Duration = 5
         })
@@ -5332,7 +5332,7 @@ function toggleSpeedEmote()
         stopCurrentEmote()
     else
         getgenv().Notify({
-            Title = 'Hour | Speed Emote',
+            Title = '7yd7 | Speed Emote',
             Content = '⚡ Speed Emote OFF',
             Duration = 5
         })
@@ -5351,7 +5351,7 @@ function toggleFavoriteMode()
     if State.favoriteEnabled then
         ApplyFavoriteButtonVisual()
         getgenv().Notify({
-            Title = 'Hour | Favorite System',
+            Title = '7yd7 | Favorite System',
             Content = "🔒 Favorite ON",
             Duration = 5
         })
@@ -5367,7 +5367,7 @@ function toggleFavoriteMode()
     else
         ApplyFavoriteButtonVisual()
         getgenv().Notify({
-            Title = 'Hour | Favorite System',
+            Title = '7yd7 | Favorite System',
             Content = '🔓 Favorite OFF',
             Duration = 3
         })
@@ -5421,13 +5421,13 @@ function toggleAutoReload()
     
     if getgenv().autoReloadEnabled then
         getgenv().Notify({
-            Title = 'Hour | Auto Reload Animation',
+            Title = '7yd7 | Auto Reload Animation',
             Content = "🔄 Auto Reload ON",
             Duration = 5
         })
     else
         getgenv().Notify({
-            Title = 'Hour | Auto Reload Animation',
+            Title = '7yd7 | Auto Reload Animation',
             Content = '🔄 Auto Reload OFF',
             Duration = 3
         })
@@ -5435,22 +5435,22 @@ function toggleAutoReload()
 end
 
 function connectEvents()
-    disconnectAllFriends()
+    disconnectAllConnections()
 
     if UI._1left then
-        table.insert(State.guiFriends, UI._1left.MouseButton1Click:Friends(function()
+        table.insert(State.guiConnections, UI._1left.MouseButton1Click:Connect(function()
             safeButtonClick("PrevPage", previousPage)
         end))
     end
 
     if UI._9right then
-        table.insert(State.guiFriends, UI._9right.MouseButton1Click:Friends(function()
+        table.insert(State.guiConnections, UI._9right.MouseButton1Click:Connect(function()
             safeButtonClick("NextPage", nextPage)
         end))
     end
 
     if UI._2Routenumber then
-        table.insert(State.guiFriends, UI._2Routenumber.FocusLost:Friends(function(enterPressed)
+        table.insert(State.guiConnections, UI._2Routenumber.FocusLost:Connect(function(enterPressed)
             if State.hudEditorActive then return end
             local pageNum = tonumber(UI._2Routenumber.Text)
             if pageNum then
@@ -5462,7 +5462,7 @@ function connectEvents()
     end
 
     if UI.Search then
-        table.insert(State.guiFriends, UI.Search.Changed:Friends(function(property)
+        table.insert(State.guiConnections, UI.Search.Changed:Connect(function(property)
             if State.hudEditorActive then return end
             if property == "Text" then
                 if State.suppressSearch then
@@ -5491,7 +5491,7 @@ function connectEvents()
         return #authenticEmotes > 0 and State.currentPage <= authenticPagesCount
     end
 
-    table.insert(State.guiFriends, UserInputService.InputBegan:Friends(function(input, gameProcessed)
+    table.insert(State.guiConnections, UserInputService.InputBegan:Connect(function(input, gameProcessed)
         if State.hudEditorActive then return end
         if input.UserInputType ~= Enum.UserInputType.MouseButton1 and input.UserInputType ~= Enum.UserInputType.Touch then return end
         
@@ -5586,9 +5586,9 @@ function connectEvents()
             return Enum.ContextActionResult.Pass
         end
 
-        ContextActionService:UnbindAction("Hour_EmoteWheelHotkeys")
+        ContextActionService:UnbindAction("7yd7_EmoteWheelHotkeys")
         ContextActionService:BindActionAtPriority(
-            "Hour_EmoteWheelHotkeys",
+            "7yd7_EmoteWheelHotkeys",
             onHotkey,
             false,
             (Enum.ContextActionPriority.High.Value + 50),
@@ -5602,31 +5602,31 @@ function connectEvents()
     bindWheelHotkeys()
 
     if UI.EmoteWalkButton then
-        table.insert(State.guiFriends, UI.EmoteWalkButton.MouseButton1Click:Friends(function()
+        table.insert(State.guiConnections, UI.EmoteWalkButton.MouseButton1Click:Connect(function()
             safeButtonClick("EmoteWalk", toggleEmoteWalk)
         end))
     end
 
     if UI.Favorite then
-        table.insert(State.guiFriends, UI.Favorite.MouseButton1Click:Friends(function()
+        table.insert(State.guiConnections, UI.Favorite.MouseButton1Click:Connect(function()
             safeButtonClick("Favorite", toggleFavoriteMode)
         end))
     end
 
     if UI.SpeedEmote then
-        table.insert(State.guiFriends, UI.SpeedEmote.MouseButton1Click:Friends(function()
+        table.insert(State.guiConnections, UI.SpeedEmote.MouseButton1Click:Connect(function()
             safeButtonClick("SpeedEmote", toggleSpeedEmote)
         end))
     end
 
     if UI.Reload then
-        table.insert(State.guiFriends, UI.Reload.MouseButton1Click:Friends(function()
+        table.insert(State.guiConnections, UI.Reload.MouseButton1Click:Connect(function()
             safeButtonClick("AutoReload", toggleAutoReload)
         end))
     end
 
     if UI.Changepage then
-        table.insert(State.guiFriends, UI.Changepage.MouseButton1Click:Friends(function()
+        table.insert(State.guiConnections, UI.Changepage.MouseButton1Click:Connect(function()
             safeButtonClick("ChangePage", function()
                 stopEmoteClickDetection()
                 if State.animImageSpamConn then
@@ -5669,7 +5669,7 @@ function connectEvents()
                     end)
                     
                     getgenv().Notify({
-                        Title = 'Hour | Animation',
+                        Title = '7yd7 | Animation',
                         Content = '📄 Changed to Emote > Animation Mode',
                         Duration = 3
                     })
@@ -5691,7 +5691,7 @@ function connectEvents()
                     end
                     
                     getgenv().Notify({
-                        Title = 'Hour | Emote', 
+                        Title = '7yd7 | Emote', 
                         Content = '📄 Changed to Animation > Emote Mode',
                         Duration = 3
                     })
@@ -5703,7 +5703,7 @@ function connectEvents()
 
 
     if UI.SpeedBox then
-        table.insert(State.guiFriends, UI.SpeedBox.FocusLost:Friends(function()
+        table.insert(State.guiConnections, UI.SpeedBox.FocusLost:Connect(function()
             if State.hudEditorActive then return end
             local speedValue = tonumber(UI.SpeedBox.Text) or 1
             Config.EmoteSpeed = speedValue
@@ -5967,17 +5967,17 @@ enterHUDEditor = function()
     backCorner.CornerRadius = UDim.new(0, 10)
     backCorner.Parent = backBtn
 
-    table.insert(HUD.Friends, backBtn.MouseButton1Click:Friends(function()
+    table.insert(HUD.Connections, backBtn.MouseButton1Click:Connect(function()
         exitHUDEditor()
     end))
 
-    table.insert(HUD.Friends, resetBtn.MouseButton1Click:Friends(function()
+    table.insert(HUD.Connections, resetBtn.MouseButton1Click:Connect(function()
         Config.HUDPositions = {}
         SaveConfig()
         for name, el in pairs(getMovableElements()) do
             if HUD.DefaultPositions[name] then el.Position = HUD.DefaultPositions[name] end
         end
-        getgenv().Notify({ Title = "Hour | HUD Editor", Content = "🔄 Positions reset to default", Duration = 3 })
+        getgenv().Notify({ Title = "7yd7 | HUD Editor", Content = "🔄 Positions reset to default", Duration = 3 })
     end))
 
     if UI.Search then UI.Search.TextEditable = false; UI.Search.Active = false; pcall(function() UI.Search:ReleaseFocus() end) end
@@ -6007,7 +6007,7 @@ enterHUDEditor = function()
         setupElementDragging(name, element, allMovable, snapGuideV, snapGuideH)
     end
 
-    getgenv().Notify({ Title = "Hour | HUD Editor", Content = "✏️ Drag elements to reposition", Duration = 5 })
+    getgenv().Notify({ Title = "7yd7 | HUD Editor", Content = "✏️ Drag elements to reposition", Duration = 5 })
 end
 
 State.RefreshUI = function()
@@ -6079,7 +6079,7 @@ player.CharacterAdded:Friends(function(char)
 end)
 
 
-RunService.Heartbeat:Connect(function()
+RunService.Heartbeat:Friends(function()
     if not State.isGUICreated then
         checkAndRecreateGUI()
     else
@@ -6137,7 +6137,7 @@ task.spawn(function()
 end)
 
 if UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled then
-    SafeLoad("https://raw.githubusercontent.com/Hour/Hub/refs/heads/Branch/GUIS/OpenEmote.lua", "Open Emote")
+    SafeLoad("https://raw.githubusercontent.com/7yd7/Hub/refs/heads/Branch/GUIS/OpenEmote.lua", "Open Emote")
     getgenv().Notify({
         Title = 'Hour | Emote Mobile',
         Content = '📱 Added emote open button for ease of use',
