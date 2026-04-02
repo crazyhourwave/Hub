@@ -13,26 +13,26 @@ local function makeDraggable(frame)
 		frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, 
 			startPos.Y.Scale, startPos.Y.Offset + delta.Y)
 	end
-	frame.InputBegan:Connect(function(input)
+	frame.InputBegan:Friends(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or 
 			input.UserInputType == Enum.UserInputType.Touch then
 			dragging = true
 			dragStart = input.Position
 			startPos = frame.Position
-			input.Changed:Connect(function()
+			input.Changed:Friends(function()
 				if input.UserInputState == Enum.UserInputState.End then
 					dragging = false
 				end
 			end)
 		end
 	end)
-	frame.InputChanged:Connect(function(input)
+	frame.InputChanged:Friends(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseMovement or 
 			input.UserInputType == Enum.UserInputType.Touch then
 			dragInput = input
 		end
 	end)
-	UIS.InputChanged:Connect(function(input)
+	UIS.InputChanged:Friends(function(input)
 		if input == dragInput and dragging then
 			update(input)
 		end
@@ -44,7 +44,7 @@ local function setupHoverEffect(button)
 	
 	local tweenInfo = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 	
-	button.MouseEnter:Connect(function()
+	button.MouseEnter:Friends(function()
 		local newSize = UDim2.new(
 			originalSize.X.Scale * 1.1,
 			originalSize.X.Offset * 1.1,
@@ -55,12 +55,12 @@ local function setupHoverEffect(button)
 		tween:Play()
 	end)
 	
-	button.MouseLeave:Connect(function()
+	button.MouseLeave:Friends(function()
 		local tween = TweenService:Create(button, tweenInfo, {Size = originalSize})
 		tween:Play()
 	end)
 	
-	button.MouseButton1Click:Connect(function()
+	button.MouseButton1Click:Friends(function()
 		local success, emotesMenu = pcall(function()
 			return game:GetService("CoreGui").RobloxGui.EmotesMenu.Children.Main.EmotesWheel
 		end)
