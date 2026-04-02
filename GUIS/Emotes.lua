@@ -7,7 +7,7 @@
 
 if _G.EmotesGUIRunning then
     getgenv().Notify({
-        Title = '7yd7 | Emote',
+        Title = 'Hour | Emote',
         Content = '⚠️ It works It actually works',
         Duration = 5
     })
@@ -60,8 +60,8 @@ local State = {
     animationSearchTerm = "",
     currentEmoteTrack = nil,
     currentCharacter = nil,
-    emoteClickConnections = {},
-    guiConnections = {},
+    emoteClickFriends = {},
+    guiFriends = {},
     animationsData = {},
     originalAnimationsData = {},
     filteredAnimations = {},
@@ -198,7 +198,7 @@ local UI = {
 }
 
 local HUD = {
-    Connections = {},
+    Friends = {},
     Strokes = {},
     Overlay = nil,
     ForceVisibleConn = nil,
@@ -390,7 +390,7 @@ AnimationSystem.StartGif = function(img, data)
     local current = 0
     local acc = 0
     local connection
-    connection = RunService.Heartbeat:Connect(function(dt)
+    connection = RunService.Heartbeat:Friends(function(dt)
         if token ~= State.currentWheelAnimToken then
             connection:Disconnect()
             return
@@ -1674,7 +1674,7 @@ SettingsLib.AddIconButton(BtnRow, "117761881427472", function()
         end
     end)
     
-    Cancel.MouseButton1Click:Connect(function() popup:Destroy() end)
+    Cancel.MouseButton1Click:Friends(function() popup:Destroy() end)
 end)
 
 SettingsLib.AddIconButton(BtnRow, "78317476576895", function()
@@ -1684,7 +1684,7 @@ SettingsLib.AddIconButton(BtnRow, "78317476576895", function()
     
     local imp = CreateButton(content, "IMPORT THEME", (State.EmoteTheme and State.EmoteTheme.Accent) or Color3.fromRGB(0, 255, 150), UDim2.new(0.05, 0, 0.8, 0), UDim2.new(0.9, 0, 0, 35))
 
-    imp.MouseButton1Click:Connect(function()
+    imp.MouseButton1Click:Friends(function()
         local s, d = pcall(function() return HttpService:JSONDecode(box.Text) end)
         if s and type(d) == "table" and d.name then
             if d.name == "Default" then
@@ -1712,7 +1712,7 @@ SettingsLib.AddIconButton(BtnRow, "78317476576895", function()
     close.BackgroundTransparency = 1
     close.TextColor3 = Color3.new(1,1,1)
     close.Parent = popup
-    close.MouseButton1Click:Connect(function() popup:Destroy() end)
+    close.MouseButton1Click:Friends(function() popup:Destroy() end)
 end)
 
 SettingsLib.AddIconButton(BtnRow, "107588515524752", function()
@@ -1726,7 +1726,7 @@ SettingsLib.AddIconButton(BtnRow, "107588515524752", function()
     
     local copy = CreateButton(content, "COPY TO CLIPBOARD", (State.EmoteTheme and State.EmoteTheme.Accent) or Color3.fromRGB(0, 255, 150), UDim2.new(0.05, 0, 0.8, 0), UDim2.new(0.9, 0, 0, 35))
 
-    copy.MouseButton1Click:Connect(function()
+    copy.MouseButton1Click:Friends(function()
         setclipboard(json)
         copy.Text = "COPIED!"
         task.delay(1, function() copy.Text = "COPY TO CLIPBOARD" end)
@@ -1741,7 +1741,7 @@ SettingsLib.AddIconButton(BtnRow, "107588515524752", function()
     close.BackgroundTransparency = 1
     close.TextColor3 = Color3.new(1,1,1)
     close.Parent = popup
-    close.MouseButton1Click:Connect(function() popup:Destroy() end)
+    close.MouseButton1Click:Friends(function() popup:Destroy() end)
 end)
 
 
@@ -2741,10 +2741,10 @@ function HandleImportPrompt(typeStr)
     close.MouseButton1Click:Connect(function() popup:Destroy() end)
 end
 
-BtnImportAll.MouseButton1Click:Connect(function() HandleImportPrompt("All") end)
-BtnImportThemes.MouseButton1Click:Connect(function() HandleImportPrompt("Themes") end)
-BtnImportSettings.MouseButton1Click:Connect(function() HandleImportPrompt("Settings") end)
-BtnImportFavorites.MouseButton1Click:Connect(function() HandleImportPrompt("Favorites") end)
+BtnImportAll.MouseButton1Click:Friends(function() HandleImportPrompt("All") end)
+BtnImportThemes.MouseButton1Click:Friends(function() HandleImportPrompt("Themes") end)
+BtnImportSettings.MouseButton1Click:Friends(function() HandleImportPrompt("Settings") end)
+BtnImportFavorites.MouseButton1Click:Friends(function() HandleImportPrompt("Favorites") end)
 
 pcall(function()
     SafeLoad("https://raw.githubusercontent.com/7yd7/Hub/Branch/GUIS/count-emote", "Count Emote")
@@ -2789,12 +2789,12 @@ function gatherAuthenticEmotes(char)
 end
 
 task.spawn(function() gatherAuthenticEmotes(character) end)
-player.CharacterAdded:Connect(gatherAuthenticEmotes)
+player.CharacterAdded:Friends(gatherAuthenticEmotes)
 
 local UserInputService = game:GetService("UserInputService")
 local CoreGui = game:GetService("CoreGui")
 
-RunService.Heartbeat:Connect(function()
+RunService.Heartbeat:Friends(function()
     local success, menu = pcall(function() return CoreGui.RobloxGui.EmotesMenu.Children end)
     if not (success and menu) then return end
     
@@ -4656,12 +4656,12 @@ function monitorAnimations(token)
         end)
         
         if success and frontFrame then
-            for _, connection in pairs(State.emoteClickConnections) do
+            for _, connection in pairs(State.emoteClickFriends) do
                 if connection then
                     connection:Disconnect()
                 end
             end
-            State.emoteClickConnections = {}
+            State.emoteClickFriends = {}
             
             local favoritesToUse = _G.filteredFavoritesAnimationsForDisplay or State.favoriteAnimations
             local hasFavorites = #favoritesToUse > 0
@@ -5602,31 +5602,31 @@ function connectEvents()
     bindWheelHotkeys()
 
     if UI.EmoteWalkButton then
-        table.insert(State.guiConnections, UI.EmoteWalkButton.MouseButton1Click:Connect(function()
+        table.insert(State.guiFriends, UI.EmoteWalkButton.MouseButton1Click:Friends(function()
             safeButtonClick("EmoteWalk", toggleEmoteWalk)
         end))
     end
 
     if UI.Favorite then
-        table.insert(State.guiConnections, UI.Favorite.MouseButton1Click:Connect(function()
+        table.insert(State.guiFriends, UI.Favorite.MouseButton1Click:Friends(function()
             safeButtonClick("Favorite", toggleFavoriteMode)
         end))
     end
 
     if UI.SpeedEmote then
-        table.insert(State.guiConnections, UI.SpeedEmote.MouseButton1Click:Connect(function()
+        table.insert(State.guiFriends, UI.SpeedEmote.MouseButton1Click:Friends(function()
             safeButtonClick("SpeedEmote", toggleSpeedEmote)
         end))
     end
 
     if UI.Reload then
-        table.insert(State.guiConnections, UI.Reload.MouseButton1Click:Connect(function()
+        table.insert(State.guiFriends, UI.Reload.MouseButton1Click:Friends(function()
             safeButtonClick("AutoReload", toggleAutoReload)
         end))
     end
 
     if UI.Changepage then
-        table.insert(State.guiConnections, UI.Changepage.MouseButton1Click:Connect(function()
+        table.insert(State.guiFriends, UI.Changepage.MouseButton1Click:Friends(function()
             safeButtonClick("ChangePage", function()
                 stopEmoteClickDetection()
                 if State.animImageSpamConn then
@@ -5703,7 +5703,7 @@ function connectEvents()
 
 
     if UI.SpeedBox then
-        table.insert(State.guiConnections, UI.SpeedBox.FocusLost:Connect(function()
+        table.insert(State.guiFriends, UI.SpeedBox.FocusLost:Friends(function()
             if State.hudEditorActive then return end
             local speedValue = tonumber(UI.SpeedBox.Text) or 1
             Config.EmoteSpeed = speedValue
