@@ -1,7 +1,7 @@
 --[[ 
     Source script taken from: https://github.com/Roblox/creator-docs/blob/main/content/en-us/characters/emotes.md
 
-    scriptblox: https://scriptblox.com/script/Universal-Script-7yd7-I-Emote-Script-48024
+    scriptblox: https://scriptblox.com/script/Universal-Script-Hour-I-Emote-Script-48024
 ]]
 
 
@@ -2751,7 +2751,7 @@ pcall(function()
 end)
 
 getgenv().Notify({
-    Title = '7yd7 | Emote',
+    Title = 'Hour | Emote',
     Content = '⚠️ Script loading...',
     Duration = 5
 })
@@ -2971,15 +2971,15 @@ function loadFavoritesAnimations()
     end
 end
 
-function disconnectAllConnections()
-    for _, connection in pairs(State.guiConnections) do
+function disconnectAllFriends()
+    for _, connection in pairs(State.guiFriends) do
         if connection then
             connection:Disconnect()
         end
     end
-    State.guiConnections = {}
+    State.guiFriends = {}
     if ContextActionService then
-        ContextActionService:UnbindAction("7yd7_EmoteWheelHotkeys")
+        ContextActionService:UnbindAction("Hour_EmoteWheelHotkeys")
     end
 end
 
@@ -4158,7 +4158,7 @@ toggleFavorite = function(emoteId, emoteName)
     if found then
         table.remove(State.favoriteEmotes, index)
         getgenv().Notify({
-            Title = '7yd7 | Favorite System',
+            Title = 'Hour | Favorite System',
             Content = '🗑️ Removed "' .. emoteName .. '" from favorites',
             Duration = 3
         })
@@ -4168,7 +4168,7 @@ toggleFavorite = function(emoteId, emoteName)
             name = emoteName .. " - ⭐"
         })
         getgenv().Notify({
-            Title = '7yd7 | Favorite System',
+            Title = 'Hour | Favorite System',
             Content = '✅ Added "' .. emoteName .. '" to favorites',
             Duration = 3
         })
@@ -4200,7 +4200,7 @@ toggleFavoriteAnimation = function(animationData)
     if found then
         table.remove(State.favoriteAnimations, index)
         getgenv().Notify({
-            Title = '7yd7 | Favorite System',
+            Title = 'Hour | Favorite System',
             Content = '🗑️ Removed "' .. animationData.name .. '" from favorites',
             Duration = 3
         })
@@ -4213,7 +4213,7 @@ toggleFavoriteAnimation = function(animationData)
             customSetName = IsCustomSetData(animationData) and (type(animationData.name) == "string" and animationData.name:gsub("%s*%-.*$", "") or animationData.name) or nil
         })
         getgenv().Notify({
-            Title = '7yd7 | Favorite System',
+            Title = 'Hour | Favorite System',
             Content = '✅ Added "' .. animationData.name .. '" to favorites',
             Duration = 3
         })
@@ -4243,12 +4243,12 @@ function setupEmoteClickDetection()
             end)
 
             if success and frontFrame then
-                for _, connection in pairs(State.emoteClickConnections) do
+                for _, connection in pairs(State.emoteClickFriends) do
                     if connection then
                         connection:Disconnect()
                     end
                 end
-                State.emoteClickConnections = {}
+                State.emoteClickFriends = {}
 
                 local randomActive = isRandomSlotActive()
                 for _, child in pairs(frontFrame:GetChildren()) do
@@ -4283,7 +4283,7 @@ applyAnimation = function(animationData)
     
     if not animate or not humanoid then
         getgenv().Notify({
-            Title = '7yd7 | Animation Error',
+            Title = 'Hour | Animation Error',
             Content = '❌ Animate or Humanoid not found',
             Duration = 3
         })
@@ -4299,7 +4299,7 @@ applyAnimation = function(animationData)
     
         if not bundledItems and not animationData.isCustomSet then
         getgenv().Notify({
-            Title = '7yd7 | Animation Error', 
+            Title = 'Hour | Animation Error', 
             Content = '??? No bundled items found',
             Duration = 3
         })
@@ -4428,7 +4428,7 @@ handleSectorAction = function(index)
         local itemData = pickRandomItemForMode()
         if not itemData then
             getgenv().Notify({
-                Title = '7yd7 | Random',
+                Title = 'Hour | Random',
                 Content = '? No valid random item found',
                 Duration = 3
             })
@@ -4450,7 +4450,7 @@ handleSectorAction = function(index)
                 end
                 State.CustomAnimations.Sets[State.currentCustomAnimationName][cat][name] = animIdToSave
                 State.SaveCustomAnimations(State.CustomAnimations)
-                getgenv().Notify({ Title = "7yd7 | Saved", Content = "✅ Saved " .. name, Duration = 3 })
+                getgenv().Notify({ Title = "Hour | Saved", Content = "✅ Saved " .. name, Duration = 3 })
                 if State.RefreshCustomAnimUI then State.RefreshCustomAnimUI() end
                 if refreshCustomAnimationState then refreshCustomAnimationState(true) end
                 State.exitCustomAnimationEditor()
@@ -4588,7 +4588,7 @@ handleSectorAction = function(index)
             end
             State.CustomAnimations.Sets[State.currentCustomAnimationName][cat][name] = animIdToSave
             State.SaveCustomAnimations(State.CustomAnimations)
-            getgenv().Notify({ Title = "7yd7 | Saved", Content = "✅ Saved " .. name, Duration = 3 })
+            getgenv().Notify({ Title = "Hour | Saved", Content = "✅ Saved " .. name, Duration = 3 })
             
             if State.RefreshCustomAnimUI then State.RefreshCustomAnimUI() end
             if refreshCustomAnimationState then refreshCustomAnimationState(true) end
@@ -4802,7 +4802,7 @@ function fetchAllEmotes()
     updateEmotes()
     
     getgenv().Notify({
-        Title = '7yd7 | Emote',
+        Title = 'Hour | Emote',
         Content = "🎉 Loaded Successfully! Total Emotes: " .. State.totalEmotesLoaded,
         Duration = 5
     })
@@ -4878,7 +4878,7 @@ end
 function searchEmotes(searchTerm)
     if State.isLoading then
         getgenv().Notify({
-            Title = '7yd7 | Emote',
+            Title = 'Hour | Emote',
             Content = '⚠️ Loading please wait...',
             Duration = 5
         })
@@ -4960,7 +4960,7 @@ end
 function searchAnimations(searchTerm)
     if State.isLoading then
         getgenv().Notify({
-            Title = '7yd7 | Animation',
+            Title = 'Hour | Animation',
             Content = '⚠️ Loading please wait...',
             Duration = 5
         })
@@ -5184,7 +5184,7 @@ function onCharacterAdded(character)
             character:WaitForChild("HumanoidRootPart")
             applyAnimation(getgenv().lastPlayedAnimation)
             getgenv().Notify({
-                Title = '7yd7 | Auto Reload Animation',
+                Title = 'Hour | Auto Reload Animation',
                 Content = '🔄 The last animation was automatically \n reapplied',
                 Duration = 3
             })
@@ -5221,7 +5221,7 @@ function onCharacterAdded(character)
         end)
     end
 
-    animator.AnimationPlayed:Connect(function(animationTrack)
+    animator.AnimationPlayed:Friends(function(animationTrack)
         if isDancing(character, animationTrack) then
             local playedEmoteId = urlToId(animationTrack.Animation.AnimationId)
             if playedEmoteId == "" or playedEmoteId == "0" then return end
@@ -5239,7 +5239,7 @@ function onCharacterAdded(character)
                 playEmote(humanoid, playedEmoteId)
 
                 if currentEmoteTrack then
-                    currentEmoteTrack.Ended:Connect(function()
+                    currentEmoteTrack.Ended:Friends(function()
                         if currentEmoteTrack == animationTrack then
                             currentEmoteTrack = nil
                         end
@@ -5287,7 +5287,7 @@ function toggleEmoteWalk()
 
     if State.emotesWalkEnabled then
         getgenv().Notify({
-            Title = '7yd7 | Emote Freeze',
+            Title = 'Hour | Emote Freeze',
             Content = "🔒 Emote freeze ON",
             Duration = 5
         })
@@ -5300,7 +5300,7 @@ function toggleEmoteWalk()
         end
     else
         getgenv().Notify({
-            Title = '7yd7 | Emote Freeze',
+            Title = 'Hour | Emote Freeze',
             Content = '🔓 Emote freeze OFF',
             Duration = 5
         })
@@ -5324,7 +5324,7 @@ function toggleSpeedEmote()
 
     if State.speedEmoteEnabled then
         getgenv().Notify({
-            Title = '7yd7 | Speed Emote',
+            Title = 'Hour | Speed Emote',
             Content = "⚡ Speed Emote ON",
             Duration = 5
         })
@@ -5332,7 +5332,7 @@ function toggleSpeedEmote()
         stopCurrentEmote()
     else
         getgenv().Notify({
-            Title = '7yd7 | Speed Emote',
+            Title = 'Hour | Speed Emote',
             Content = '⚡ Speed Emote OFF',
             Duration = 5
         })
@@ -5351,7 +5351,7 @@ function toggleFavoriteMode()
     if State.favoriteEnabled then
         ApplyFavoriteButtonVisual()
         getgenv().Notify({
-            Title = '7yd7 | Favorite System',
+            Title = 'Hour | Favorite System',
             Content = "🔒 Favorite ON",
             Duration = 5
         })
@@ -5367,7 +5367,7 @@ function toggleFavoriteMode()
     else
         ApplyFavoriteButtonVisual()
         getgenv().Notify({
-            Title = '7yd7 | Favorite System',
+            Title = 'Hour | Favorite System',
             Content = '🔓 Favorite OFF',
             Duration = 3
         })
@@ -5421,13 +5421,13 @@ function toggleAutoReload()
     
     if getgenv().autoReloadEnabled then
         getgenv().Notify({
-            Title = '7yd7 | Auto Reload Animation',
+            Title = 'Hour | Auto Reload Animation',
             Content = "🔄 Auto Reload ON",
             Duration = 5
         })
     else
         getgenv().Notify({
-            Title = '7yd7 | Auto Reload Animation',
+            Title = 'Hour | Auto Reload Animation',
             Content = '🔄 Auto Reload OFF',
             Duration = 3
         })
@@ -5435,22 +5435,22 @@ function toggleAutoReload()
 end
 
 function connectEvents()
-    disconnectAllConnections()
+    disconnectAllFriends()
 
     if UI._1left then
-        table.insert(State.guiConnections, UI._1left.MouseButton1Click:Connect(function()
+        table.insert(State.guiFriends, UI._1left.MouseButton1Click:Friends(function()
             safeButtonClick("PrevPage", previousPage)
         end))
     end
 
     if UI._9right then
-        table.insert(State.guiConnections, UI._9right.MouseButton1Click:Connect(function()
+        table.insert(State.guiFriends, UI._9right.MouseButton1Click:Friends(function()
             safeButtonClick("NextPage", nextPage)
         end))
     end
 
     if UI._2Routenumber then
-        table.insert(State.guiConnections, UI._2Routenumber.FocusLost:Connect(function(enterPressed)
+        table.insert(State.guiFriends, UI._2Routenumber.FocusLost:Friends(function(enterPressed)
             if State.hudEditorActive then return end
             local pageNum = tonumber(UI._2Routenumber.Text)
             if pageNum then
@@ -5462,7 +5462,7 @@ function connectEvents()
     end
 
     if UI.Search then
-        table.insert(State.guiConnections, UI.Search.Changed:Connect(function(property)
+        table.insert(State.guiFriends, UI.Search.Changed:Friends(function(property)
             if State.hudEditorActive then return end
             if property == "Text" then
                 if State.suppressSearch then
@@ -5491,7 +5491,7 @@ function connectEvents()
         return #authenticEmotes > 0 and State.currentPage <= authenticPagesCount
     end
 
-    table.insert(State.guiConnections, UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    table.insert(State.guiFriends, UserInputService.InputBegan:Friends(function(input, gameProcessed)
         if State.hudEditorActive then return end
         if input.UserInputType ~= Enum.UserInputType.MouseButton1 and input.UserInputType ~= Enum.UserInputType.Touch then return end
         
@@ -5586,9 +5586,9 @@ function connectEvents()
             return Enum.ContextActionResult.Pass
         end
 
-        ContextActionService:UnbindAction("7yd7_EmoteWheelHotkeys")
+        ContextActionService:UnbindAction("Hour_EmoteWheelHotkeys")
         ContextActionService:BindActionAtPriority(
-            "7yd7_EmoteWheelHotkeys",
+            "Hour_EmoteWheelHotkeys",
             onHotkey,
             false,
             (Enum.ContextActionPriority.High.Value + 50),
@@ -5669,7 +5669,7 @@ function connectEvents()
                     end)
                     
                     getgenv().Notify({
-                        Title = '7yd7 | Animation',
+                        Title = 'Hour | Animation',
                         Content = '📄 Changed to Emote > Animation Mode',
                         Duration = 3
                     })
@@ -5691,7 +5691,7 @@ function connectEvents()
                     end
                     
                     getgenv().Notify({
-                        Title = '7yd7 | Emote', 
+                        Title = 'Hour | Emote', 
                         Content = '📄 Changed to Animation > Emote Mode',
                         Duration = 3
                     })
@@ -5967,17 +5967,17 @@ enterHUDEditor = function()
     backCorner.CornerRadius = UDim.new(0, 10)
     backCorner.Parent = backBtn
 
-    table.insert(HUD.Connections, backBtn.MouseButton1Click:Connect(function()
+    table.insert(HUD.Friends, backBtn.MouseButton1Click:Friends(function()
         exitHUDEditor()
     end))
 
-    table.insert(HUD.Connections, resetBtn.MouseButton1Click:Connect(function()
+    table.insert(HUD.Friends, resetBtn.MouseButton1Click:Friends(function()
         Config.HUDPositions = {}
         SaveConfig()
         for name, el in pairs(getMovableElements()) do
             if HUD.DefaultPositions[name] then el.Position = HUD.DefaultPositions[name] end
         end
-        getgenv().Notify({ Title = "7yd7 | HUD Editor", Content = "🔄 Positions reset to default", Duration = 3 })
+        getgenv().Notify({ Title = "Hour | HUD Editor", Content = "🔄 Positions reset to default", Duration = 3 })
     end))
 
     if UI.Search then UI.Search.TextEditable = false; UI.Search.Active = false; pcall(function() UI.Search:ReleaseFocus() end) end
@@ -6007,7 +6007,7 @@ enterHUDEditor = function()
         setupElementDragging(name, element, allMovable, snapGuideV, snapGuideH)
     end
 
-    getgenv().Notify({ Title = "7yd7 | HUD Editor", Content = "✏️ Drag elements to reposition", Duration = 5 })
+    getgenv().Notify({ Title = "Hour | HUD Editor", Content = "✏️ Drag elements to reposition", Duration = 5 })
 end
 
 State.RefreshUI = function()
@@ -6054,7 +6054,7 @@ if player.Character then
     onCharacterAdded(player.Character)
 end
 
-player.CharacterAdded:Connect(function(char)
+player.CharacterAdded:Friends(function(char)
     character = char
     humanoid = char:WaitForChild("Humanoid")
     onCharacterAdded(char)
@@ -6088,7 +6088,7 @@ RunService.Heartbeat:Connect(function()
     end
 end)
 
-RunService.Stepped:Connect(function()
+RunService.Stepped:Friends(function()
     if humanoid and State.currentEmoteTrack and typeof(State.currentEmoteTrack) == "Instance" and State.currentEmoteTrack:IsA("AnimationTrack") and State.currentEmoteTrack.IsPlaying then
         if humanoid.MoveDirection.Magnitude > 0 then
             if State.speedEmoteEnabled and not State.emotesWalkEnabled then
@@ -6137,9 +6137,9 @@ task.spawn(function()
 end)
 
 if UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled then
-    SafeLoad("https://raw.githubusercontent.com/7yd7/Hub/refs/heads/Branch/GUIS/OpenEmote.lua", "Open Emote")
+    SafeLoad("https://raw.githubusercontent.com/Hour/Hub/refs/heads/Branch/GUIS/OpenEmote.lua", "Open Emote")
     getgenv().Notify({
-        Title = '7yd7 | Emote Mobile',
+        Title = 'Hour | Emote Mobile',
         Content = '📱 Added emote open button for ease of use',
         Duration = 10
     })
@@ -6147,7 +6147,7 @@ end
 
 if UserInputService.KeyboardEnabled then
     getgenv().Notify({
-        Title = '7yd7 | Emote PC',
+        Title = 'Hour | Emote PC',
         Content = '💻 Open menu press button "."',
         Duration = 10
     })
