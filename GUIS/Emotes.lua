@@ -89,11 +89,11 @@ local State = {
     EmoteTheme = nil,
     isApplyingTheme = false,
     targetImages = {},
-    AnimationCachePath = "7yd7/AnimationCache.json",
+    AnimationCachePath = "Hour/AnimationCache.json",
     AnimationCache = {},
-    AnimationListCachePath = "7yd7/AnimationListCache.json",
-    EmoteListCachePath = "7yd7/EmoteListCache.json",
-    CustomAnimationPath = "7yd7/CustomAnimations.json",
+    AnimationListCachePath = "Hour/AnimationListCache.json",
+    EmoteListCachePath = "Hour/EmoteListCache.json",
+    CustomAnimationPath = "Hour/CustomAnimations.json",
     CustomAnimations = {},
     currentCustomAnimationName = "Default",
     customAnimationEditorActive = false,
@@ -115,7 +115,7 @@ end
 function saveAnimationCache()
     if writefile then
         pcall(function()
-            if not isfolder("7yd7") then makefolder("7yd7") end
+            if not isfolder("Hour") then makefolder("Hour") end
             writefile(State.AnimationCachePath, HttpService:JSONEncode(State.AnimationCache))
         end)
     end
@@ -452,7 +452,7 @@ function SafeLoad(url, name)
     
     if not success or not content or content == "" then
         getgenv().Notify({
-            Title = '7yd7 | Error',
+            Title = 'Hour | Error',
             Content = 'Failed to download ' .. (name or "script") .. ' after 3 attempts.',
             Duration = 5
         })
@@ -461,13 +461,13 @@ function SafeLoad(url, name)
 
     local func, err = loadstring(content)
     if not func then
-        warn("7yd7 | SafeLoad: Failed to parse " .. (name or "script") .. ": " .. tostring(err))
+        warn("Hour | SafeLoad: Failed to parse " .. (name or "script") .. ": " .. tostring(err))
         return function() end
     end
 
     local ok, res = pcall(func)
     if not ok then
-        warn("7yd7 | SafeLoad: Error executing " .. (name or "script") .. ": " .. tostring(res))
+        warn("Hour | SafeLoad: Error executing " .. (name or "script") .. ": " .. tostring(res))
         return function() end
     end
     return res
